@@ -1,0 +1,9 @@
+I created a 20 minute video in which I go through my code, what it ultimately is supposed to do, and the fundamentals behind it. It revolves around 3 testing algorithims
+One of my simulations represents the normal game of Are You The One. I want to show how this simulation, over the course of a couple hundred or thousand games,
+takes a very long time to finish the game. It takes a very high amount of rounds in order to finish the game. I created 2 other simulations and optimized them using 
+different testing algorithims and methods to find pairing, in hopes of being able to reduce this very high average number of rounds. The end goal is to print out a graph
+and time table that showcases all 3 simulations side by side and compare their average amount of rounds over the course of many games. 
+
+
+The link to the video walkthrough is here:
+https://kaltura.uconn.edu/media/CSE+Are+You+The+One+Project/1_kdkfzcun?st=0&ed=1397
