@@ -1,0 +1,269 @@
+import random
+
+
+class Contestant_Pairings:
+    
+    # initizalize, create variables to use later, create empty dictionary
+
+    def __init__(self, player):
+        self.player = player
+        self.pair = None
+        self.randomization = {}
+
+    """ Simulation of 3 games with 3 different algorithims """
+
+
+    def testing_algorithim1(self, contestant, contestant_pairs):
+        # We use contestant_pairs as a way to check if the pair is possible.
+        # If it is 0, we assign the contestant with a value of 0 because we know that pair is impossible
+        if contestant_pairs == 0: 
+            self.randomization[contestant] = 0
+
+
+    def testing_algorithim2(self, contestants):
+        for contestant in contestants: # go through every contestant
+            self.randomization[contestant] = 1 # we assign a value of 1 for every contestant
+      
+
+    def testing_algorithim3(self, contestant, contestant_pairs):
+        # Same as before, we know if contestant_pairs is 0, the pair is not possible so we assign 0
+        if self.randomization[contestant] == 0:
+            return
+        if contestant_pairs == 0:
+            self.randomization[contestant] = 0
+        else: 
+            # If there are potential pairs to be made, we can add them and divide by 2 
+            self.randomization[contestant] += (contestant_pairs) / 2
+    
+
+    def find_pairing1(self, unpaired):
+        for pair_making in unpaired:
+            if self.randomization[pair_making] != 0:
+                return pair_making # checking which pairs can be made
+        
+        return unpaired[0]  
+
+
+    def find_pairing2(self, unpaired):
+        unpaired2 = {contestant: 
+        self.randomization[contestant] for contestant in unpaired} # create a new list of unpaired contestants
+        return max(unpaired2, key=unpaired2.get) # we return the max number of unpaired contestants, trying to deal with them all
+
+
+    def check_pairing(self, pair):
+        return self.pair == pair
+
+    def add_pairing(self, pair):
+        self.pair = pair 
+
+ 
+        
+
+
+class Game:
+    def game_status(self):
+        self.game_over = True # A function we can call after every round to check if the game is over
+                              # or we can still continue. We treat game_over as a flag to verify the status of the game
+
+
+
+    def __init__(self, contestants):
+        self.contestants = [] # initialize empty list of contestants
+        self.game_over = False  # keep track of game status
+        for contestant in contestants: # keep track of every single contestant
+            self.contestants.append(Contestant_Pairings(contestant)) # we can call the Contestant Pairings class
+                                                                    # and run its functions on our contestants 
+                                                                    # to create our pairingsthen and append it all to our list
+        self.rounds = 0 # Keep track of the game rounds, we start at round 0
+    
+
+  
+    def game_start(self):
+        contestant_list = [(contestant) for contestant in self.contestants] 
+        random.shuffle(contestant_list) # randomize the contestants in the list
+        
+        for contestant in self.contestants: 
+            contestant_list2 = [(contestant2) for contestant2 in self.contestants]
+            contestant.testing_algorithim2(contestant_list2) # use algorithim 2
+        
+        """ Start pairing randomly """
+
+        while len(contestant_list) > 0: # start looping here, base case is that we need to have at least 1 contestant
+            x = contestant_list.pop()
+            y = contestant_list.pop()
+            x.add_pairing(y)
+            y.add_pairing(x)
+            
+        # after we fail the base case, we need to see if the game is over    
+        while self.game_over == False:
+            self.round() # keep track of the game round
+
+class Game1(Game):
+    def __init__(self, contestants):
+        super().__init__(contestants)
+
+    def round(self):
+        contestant_list = [(contestant) for contestant in self.contestants]
+        perfect_pairs = []
+        random.shuffle(contestant_list)
+        
+        while len(contestant_list) > 0:
+            x = contestant_list.pop()
+            y = x.find_pairing1(contestant_list) # find pair using find_pairing1 function
+            contestant_list.remove(y) # remove pair from contestant list
+            perfect_pairs.append((x, y)) # add the pair to the pair list
+        
+
+        correct_pairs = 0
+        for matched_contestant in perfect_pairs:
+            if matched_contestant[0].check_pairing(matched_contestant[1]): # checks if they are a perfect pair
+                correct_pairs += 1 # keep track of correctly guessed perfect pairs
+        if correct_pairs == len(perfect_pairs): # check if correct_pairs and perfect pairs are the same length
+            self.game_status()   # check if the game is over
+
+        if correct_pairs == 0:
+            for matched_contestant in perfect_pairs:
+                matched_contestant[0].testing_algorithim1(matched_contestant[1], 0)
+                matched_contestant[1].testing_algorithim1(matched_contestant[0], 0)
+        
+
+        """ Truth booth, verifies if the selected pair is a perfect pair or not """
+
+
+        truth_booth = perfect_pairs[0]
+        if truth_booth[0].check_pairing(truth_booth[1]): # check if person 0 and person 1 are  aperfect pair
+            self.contestants.remove(truth_booth[0])
+            self.contestants.remove(truth_booth[1])      # remove both from the contestants list
+        else:
+            truth_booth[0].testing_algorithim1(truth_booth[1], 0)
+            truth_booth[1].testing_algorithim1(truth_booth[0], 0)       # otherwise we run our testing algorithim 1 on them
+       
+        self.rounds += 1 # add one to rounds for every iteration of the loop
+
+class Game2(Game):
+    def __init__(self, contestants):
+        super().__init__(contestants)
+
+    def round(self):
+        contestant_list = [(contestant) for contestant in self.contestants]
+        pairs = []
+        random.shuffle(contestant_list)
+        
+
+        while len(contestant_list) > 0:
+            x = contestant_list.pop()
+            y = contestant_list.pop()
+            pairs.append((x, y))
+        successful_pairs = 0
+        
+
+        for pair in pairs:
+            if pair[0].check_pairing(pair[1]):
+                successful_pairs += 1
+        if successful_pairs == len(pairs):
+            self.game_status()
+
+
+        booth = pairs[0]
+        if booth[0].check_pairing(booth[1]):
+            self.contestants.remove(booth[0])
+            self.contestants.remove(booth[1])
+        
+        self.rounds += 1
+
+
+class Game3(Game):
+    def __init__(self, contestants):
+        super().__init__(contestants)
+
+
+    def round(self):
+        contestant_list = [(contestant) for contestant in self.contestants]
+        pairs = []
+        random.shuffle(contestant_list)
+        
+        while len(contestant_list) > 0:
+            x = contestant_list.pop()
+            y = x.find_pairing2(contestant_list)
+            contestant_list.remove(y)
+            pairs.append((x, y))
+        
+        successful_pairs = 0
+        for pair in pairs:
+            if pair[0].check_pairing(pair[1]):
+                successful_pairs += 1
+        if successful_pairs == len(pairs):
+            self.game_status()
+        
+        for pair in pairs:
+            pair[0].testing_algorithim3(pair[1], successful_pairs)
+            pair[1].testing_algorithim3(pair[0], successful_pairs)
+        
+
+        
+        booth = pairs[0]
+        if booth[0].check_pairing(booth[1]):
+            self.contestants.remove(booth[0])
+            self.contestants.remove(booth[1])
+        else:
+            booth[0].testing_algorithim3(booth[1], 0)
+            booth[1].testing_algorithim3(booth[0], 0)
+        
+        self.rounds += 1
+
+
+
+def game1_avgs(n):
+    g1_results = []
+    for i in range(n):
+        contestants = [str(i) for i in range(16)]
+        x = Game1(contestants)
+        x.game_start()
+        g1_results.append(x.rounds)
+    sum1 = 0
+    for n in g1_results:
+        sum1 += n
+    game1_avgs = sum1 / len(g1_results)
+    
+    print("The Average Number of Rounds Taken For Algorithim 1 is {} Rounds ".format(game1_avgs))
+    return(game1_avgs, g1_results)
+
+def game2_avgs(n):
+    g2_results = []
+    for i in range(n):
+        contestants = [str(i) for i in range(16)]
+        x = Game2(contestants)
+        x.game_start()
+        g2_results.append(x.rounds)
+    sum2 = 0
+    for n in g2_results:
+        sum2 += n
+    game2_avgs = sum2 / len(g2_results)
+    
+    print("The Average Number of Rounds Taken For Algorithim 2 is {} Rounds ".format(game2_avgs))
+    
+    return (game2_avgs, g2_results)
+
+def game3_avgs(n):
+    g3_results = []
+    for i in range(n):
+        contestants = [str(i) for i in range(16)]
+        x = Game3(contestants)
+        x.game_start()
+        g3_results.append(x.rounds)
+    sum3 = 0
+    for n in g3_results:
+        sum3 += n
+    game3_avgs = sum3 / len(g3_results)
+    
+    print("The Average Number of Rounds Taken For Algorithim 3 is {} Rounds ".format(game3_avgs))
+    
+    return (game3_avgs, g3_results)
+
+
+     
+if __name__ == "__main__":
+    n = 1000
+    game1_avgs(n)
+    game2_avgs(n)
+    game3_avgs(n)
