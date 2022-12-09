@@ -1,0 +1,10 @@
+To finish up my project, I added code to calculate the average rounds it took for each of my testing algorithims of Are You The One to test which algorithims
+on average proved to be the fastest, most efficient and end simulations of Are You The One in the least number of rounds as opposed to the 
+most number of rounds. This will help indicate whether or not our goal was ultimately successful: proving that the normal way to play Are You The One
+is very time-consuming and takes many rounds to finish and that my testing algorithims will reduce the amount of time and rounds it takes on average
+to finish one simulation of are you the one. I used matplotlib in Python to graph this data for a visual representation of the scenario for easier
+understanding and analysis. 
+
+
+Here is the video footage going over it
+https://kaltura.uconn.edu/media/CSE+Are+You+The+One+Video+for+Graphs+and+Averaging/1_9ybm0qwd
