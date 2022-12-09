@@ -1,0 +1,24 @@
+import honorsgameshow
+import matplotlib.pyplot as plt 
+
+mode = "Bar"
+mode2 = "Save"
+n = 1000
+
+if mode:
+    game1_avgs, g1_results = honorsgameshow.game1_avgs(n)
+    game2_avgs, g2_results = honorsgameshow.game2_avgs(n)
+    game3_avgs, g3_results = honorsgameshow.game3_avgs(n)
+    x = [(i+1) for i in range(n)]
+    
+
+    plt.bar(1, game1_avgs, label = 'Testing Algorithm 1')
+    plt.bar(2, game2_avgs, label = 'Testing Algorithm 2')
+    plt.bar(3, game3_avgs, label = 'Testing Algorithm 3')
+    plt.title("Average Number of Rounds Per Game in {} Games of Are You The One".format(n))
+    plt.ylabel("Average Number of Rounds Per Game")
+    plt.legend()
+    if mode2 == "Show":
+        plt.show()
+    if mode2 == "Save":
+        plt.savefig("Bar")
